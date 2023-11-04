@@ -1,0 +1,14 @@
+{
+	"extends": ["@sapphire/ts-config", "@sapphire/ts-config/extra-strict", "@sapphire/ts-config/decorators"],
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist",
+		"target": "ESNext",
+		"tsBuildInfoFile": "dist/.tsbuildinfo",
+		"paths": {
+			"#lib/*": ["./src/lib/*"],
+			"#root/*": ["./*"]
+		}
+	},
+	"include": ["src"]
+}
