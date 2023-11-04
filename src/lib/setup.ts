@@ -8,7 +8,6 @@ import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-subcommands/register';
 import { setup, type ArrayString } from '@skyra/env-utilities';
 import * as colorette from 'colorette';
-import { join } from 'path';
 import { inspect } from 'util';
 import { srcDir } from '#lib/constants';
 
@@ -16,7 +15,7 @@ import { srcDir } from '#lib/constants';
 ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.BulkOverwrite);
 
 // Read env var
-setup({ path: join(srcDir, '.env') });
+setup({ path: new URL('.env', srcDir) });
 
 // Set default inspection depth
 inspect.defaultOptions.depth = 1;
