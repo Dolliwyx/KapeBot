@@ -3,8 +3,8 @@ import { LogLevel, SapphireClient } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 
 const client = new SapphireClient({
-	defaultPrefix: '!',
-	regexPrefix: /^(hey +)?bot[,! ]/i,
+	defaultPrefix: 'k!',
+	regexPrefix: /^(hey +)?kape[,! ]/i,
 	caseInsensitiveCommands: true,
 	logger: {
 		level: LogLevel.Debug
@@ -23,7 +23,11 @@ const client = new SapphireClient({
 		GatewayIntentBits.MessageContent
 	],
 	partials: [Partials.Channel],
-	loadMessageCommandListeners: true
+	loadMessageCommandListeners: true,
+	typing: true,
+	presence: {
+		activities: [{ name: 'Kape VSC', type: 3 }]
+	}
 });
 
 const main = async () => {
