@@ -20,13 +20,13 @@ interface Tag {
 	name: string;
 	content: string;
 	author: string;
-	createdAt: string;
-	updatedAt: string;
+	createdAt: number;
+	updatedAt: number;
 }
 
 interface Badge {
 	name: string;
 	description: string;
-	createdAt: string;
+	createdAt: number;
 	createdBy: string;
 }
