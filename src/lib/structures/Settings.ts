@@ -6,7 +6,6 @@ export class Settings {
 	public path: URL;
 	public userSettings!: Keyv;
 	public guildSettings!: Keyv;
-	public db!: Keyv;
 
 	public constructor(path: URL) {
 		this.path = path;
@@ -71,12 +70,7 @@ export class Settings {
 		return this.userSettings.delete(userId);
 	}
 
-	public get getDb() {
-		return this.db;
-	}
-
 	public async _disconnect() {
-		await this.db.disconnect();
 		await this.userSettings.disconnect();
 		await this.guildSettings.disconnect();
 	}
