@@ -28,6 +28,6 @@ export class UserPrecondition extends Precondition {
 
 declare module '@sapphire/framework' {
 	interface Preconditions {
-		ModOnly: never;
+		ModeratorOnly: never;
 	}
 }
