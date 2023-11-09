@@ -160,7 +160,7 @@ export class UserCommand extends Subcommand {
 		if (!description) return message.reply('You must provide a description for the badge.');
 
 		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
-		const targetBadge = badges.find((b) => b.id === badgeId)
+		const targetBadge = badges.find((b) => b.id === badgeId);
 		if (!targetBadge) return message.reply(`There is no badge with ID ${badgeId}.`);
 
 		targetBadge.name = title;
