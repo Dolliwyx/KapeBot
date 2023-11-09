@@ -1,11 +1,12 @@
 import { mergeDefault } from '@sapphire/utilities';
 import { GuildSettings, UserSettings, defaultGuildSettings, defaultUserSettings } from '#lib/common/defaultSettings';
 import Keyv from 'keyv';
+import { container } from '@sapphire/framework';
 
 export class Settings {
-	public path: URL;
-	public userSettings!: Keyv;
-	public guildSettings!: Keyv;
+	private path: URL;
+	private userSettings!: Keyv;
+	private guildSettings!: Keyv;
 
 	public constructor(path: URL) {
 		this.path = path;
@@ -16,6 +17,9 @@ export class Settings {
 	public init() {
 		this.userSettings = new Keyv(this.path.pathname, { namespace: 'userSettings', adapter: 'sqlite' });
 		this.guildSettings = new Keyv(this.path.pathname, { namespace: 'guildSettings', adapter: 'sqlite' });
+
+		this.userSettings.on('error', (error) => container.logger.error(error));
+		this.guildSettings.on('error', (error) => container.logger.error(error));
 	}
 
 	public async createGuildSetting(guildId: string): Promise<GuildSettings> {
