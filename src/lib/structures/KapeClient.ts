@@ -35,8 +35,6 @@ export class KapeClient extends SapphireClient {
 	public override async login(token?: string) {
 		this.logger.info('Readying database...');
 		container.settings.init();
-		container.settings.userSettings.on('error', (err) => this.logger.error(`An error occured! ${err}`));
-        container.settings.guildSettings.on('error', (err) => this.logger.error(`An error occured! ${err}`));
 
 		return super.login(token);
 	}
