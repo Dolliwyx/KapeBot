@@ -74,6 +74,24 @@ export class Settings {
 		return this.userSettings.delete(userId);
 	}
 
+	public async getAllGuildSettings(): Promise<{ id: string; settings: GuildSettings }[]> {
+		const arr = [];
+		for await (const [id, _] of this.guildSettings.iterator()) {
+			const settings = await this.getGuildSetting(id);
+			arr.push({ id, settings });
+		}
+		return arr;
+	}
+
+	public async getAllUserSettings(): Promise<{ id: string; settings: UserSettings }[]> {
+		const arr = [];
+		for await (const [id, _] of this.userSettings.iterator()) {
+			const settings = await this.getUserSetting(id);
+			arr.push({ id, settings });
+		}
+		return arr;
+	}
+
 	public async _disconnect() {
 		await this.userSettings.disconnect();
 		await this.guildSettings.disconnect();
