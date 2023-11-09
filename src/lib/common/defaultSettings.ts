@@ -25,8 +25,9 @@ interface Tag {
 }
 
 interface Badge {
-	name: string;
+	id: string;
 	description: string;
+	name: string;
 	createdAt: number;
 	createdBy: string;
 }
