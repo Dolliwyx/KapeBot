@@ -4,11 +4,13 @@ export const defaultGuildSettings: GuildSettings = {
 };
 
 export const defaultUserSettings: UserSettings = {
+	globalBadges: [],
 	userBadges: []
 };
 
 export interface UserSettings {
-	userBadges: Badge[];
+	globalBadges: Badge[];
+	userBadges: Badge['id'][];
 }
 
 export interface GuildSettings {
@@ -26,8 +28,9 @@ interface Tag {
 
 interface Badge {
 	id: string;
-	description: string;
 	name: string;
+	description: string;
+	updatedAt: number;
 	createdAt: number;
 	createdBy: string;
 }
