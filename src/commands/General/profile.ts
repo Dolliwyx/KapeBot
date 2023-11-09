@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { EmbedBuilder, time } from 'discord.js';
+import { EmbedBuilder, bold, time } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
 	description: "View a user's profile.",
@@ -20,8 +20,17 @@ export class UserCommand extends Command {
 		const user = interaction.options.getUser('user') ?? interaction.user;
 		const member = await interaction.guild?.members.fetch(user.id);
 
-		const userSettings = await this.container.settings.getUserSetting(user.id);
-		const badges = userSettings.userBadges.sort((a, b) => b.createdAt - a.createdAt);
+		const { userBadges, globalBadges } = await this.container.settings.getUserSetting(user.id);
+		const badges = (
+			await Promise.all(
+				userBadges.map(async (id) => {
+					const badge = (await this.container.settings.getGuildSetting(interaction.guildId!)).badges.find((badge) => badge.id === id);
+					// delete badge if it doesn't exist anymore
+					if (!badge) await this.container.settings.setUserSetting(user.id, { userBadges: userBadges.filter((badgeId) => badgeId !== id) });
+					return badge;
+				})
+			)
+		).sort((a, b) => b!.createdAt - a!.createdAt);
 
 		const embed = new EmbedBuilder()
 			.setColor('#739072')
@@ -34,7 +43,16 @@ export class UserCommand extends Command {
 					value: member?.joinedAt ? `${time(member?.joinedAt!, 'f')} (${time(member.joinedAt, 'R')})` : 'Unknown',
 					inline: true
 				},
-				{ name: 'Badges', value: badges.length ? badges.map((badge) => badge.name).join(', ') : 'This user has no badges.' }
+				{
+					name: 'Badges',
+					value:
+						globalBadges.length || badges.length
+							? [
+									globalBadges.length ? globalBadges.map((badge) => `➥ ${bold(badge!.name)}`).join('\n') : '',
+									badges.length ? badges.map((badge) => `➥ ${bold(badge!.name)}`).join('\n') : ''
+							  ].join('\n')
+							: 'This user has no badges.'
+				}
 			])
 			.setFooter({
 				text: `Requested by ${interaction.user.username}`,
