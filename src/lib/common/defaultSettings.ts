@@ -17,7 +17,7 @@ export interface UserSettings {
 export interface GuildSettings {
 	tags: Tag[];
 	badges: Badge[];
-	suggestions: Suggestion[]
+	suggestions: Suggestion[];
 }
 
 interface Tag {
