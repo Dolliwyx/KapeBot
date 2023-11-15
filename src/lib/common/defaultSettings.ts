@@ -1,6 +1,7 @@
 export const defaultGuildSettings: GuildSettings = {
 	tags: [],
-	badges: []
+	badges: [],
+	suggestions: []
 };
 
 export const defaultUserSettings: UserSettings = {
@@ -16,6 +17,7 @@ export interface UserSettings {
 export interface GuildSettings {
 	tags: Tag[];
 	badges: Badge[];
+	suggestions: Suggestion[]
 }
 
 interface Tag {
@@ -33,4 +35,11 @@ interface Badge {
 	updatedAt: number;
 	createdAt: number;
 	createdBy: string;
+}
+
+interface Suggestion {
+	id: number;
+	content: string;
+	author: string;
+	createdAt: number;
 }
