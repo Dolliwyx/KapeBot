@@ -13,6 +13,7 @@ export class UserCommand extends Command {
 				.setName(this.name)
 				.setDescription(this.description)
 				.addUserOption((option) => option.setName('user').setDescription('The user to view the profile of.').setRequired(false))
+				.setDMPermission(false)
 		);
 	}
 
