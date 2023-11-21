@@ -8,7 +8,7 @@ import type { ModalSubmitInteraction, TextChannel } from 'discord.js';
 export class ModalHandler extends InteractionHandler {
 	public async run(interaction: ModalSubmitInteraction) {
 		const suggestionContent = interaction.fields.getTextInputValue('suggestInput');
-		const channel = interaction.guild?.channels.cache.get('1170314657144254564') as TextChannel;
+		const channel = interaction.guild?.channels.cache.get('1176363870630187068') as TextChannel;
 
 		// get latest suggestion id from database, if any
 		const { suggestions } = await this.container.settings.getGuildSetting(interaction.guildId!);
