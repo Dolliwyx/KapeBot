@@ -28,17 +28,17 @@ export class Setting<T extends object> {
 		this.driver.on('error', (error) => console.error(error));
 	}
 
-	public async create(id: string) {
+	public async create(id: string): Promise<T> {
 		await this.driver.set(id, {});
 		return this.defaultSettings;
 	}
 
-	public async get(id: string) {
+	public async get(id: string): Promise<T> {
 		const settings = (await this.driver.get(id)) ?? (await this.create(id));
 		return mergeDefault(this.defaultSettings, settings);
 	}
 
-	public async set(id: string, data: Partial<T>) {
+	public async set(id: string, data: Partial<T>): Promise<T> {
 		if (typeof data !== 'object') throw new Error('Data must be an object');
 		const settings = (await this.driver.get(id)) ?? (await this.create(id));
 		const updatedSettings = mergeDefault(settings, data);
@@ -46,7 +46,7 @@ export class Setting<T extends object> {
 		return mergeDefault(this.defaultSettings, updatedSettings);
 	}
 
-	public async reset(id: string) {
+	public async reset(id: string): Promise<T> {
 		await this.set(id, this.defaultSettings);
 		return this.defaultSettings;
 	}
