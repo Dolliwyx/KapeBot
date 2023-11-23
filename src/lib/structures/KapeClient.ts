@@ -34,14 +34,14 @@ export class KapeClient extends SapphireClient {
 
 	public override async login(token?: string) {
 		this.logger.info('Readying database...');
-		container.settings.init();
 
 		return super.login(token);
 	}
 
 	public override async destroy() {
 		this.logger.info('Disconnecting from database...');
-		await container.settings._disconnect();
+		await container.settings.users._disconnect();
+		await container.settings.guilds._disconnect();
 
 		return super.destroy();
 	}
