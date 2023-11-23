@@ -55,6 +55,15 @@ export class Setting<T extends object> {
 		return this.driver.delete(id);
 	}
 
+	public async getAll(): Promise<{id: string, settings: T }[]> {
+		const arr = [];
+		for await (const [id, _] of this.driver.iterator()) {
+			const settings = await this.get(id);
+			arr.push({ id, settings });
+		}
+		return arr;
+	}
+
     async _disconnect() {
         return this.driver.disconnect();
     }
