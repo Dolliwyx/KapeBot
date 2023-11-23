@@ -21,13 +21,13 @@ export class UserCommand extends Command {
 		const user = interaction.options.getUser('user') ?? interaction.user;
 		const member = await interaction.guild?.members.fetch(user.id);
 
-		const { userBadges, globalBadges } = await this.container.settings.getUserSetting(user.id);
+		const { userBadges, globalBadges } = await this.container.settings.users.get(user.id);
 		const badges = (
 			await Promise.all(
 				userBadges.map(async (id) => {
-					const badge = (await this.container.settings.getGuildSetting(interaction.guildId!)).badges.find((badge) => badge.id === id);
+					const badge = (await this.container.settings.guilds.get(interaction.guildId!)).badges.find((badge) => badge.id === id);
 					// delete badge if it doesn't exist anymore
-					if (!badge) await this.container.settings.setUserSetting(user.id, { userBadges: userBadges.filter((badgeId) => badgeId !== id) });
+					if (!badge) await this.container.settings.users.set(user.id, { userBadges: userBadges.filter((badgeId) => badgeId !== id) });
 					return badge;
 				})
 			)
