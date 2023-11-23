@@ -19,6 +19,6 @@ declare module '@sapphire/pieces' {
 		settings: {
 			users: Setting<UserSchema>;
 			guilds: Setting<GuildSchema>;
-		}
+		};
 	}
 }

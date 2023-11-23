@@ -26,7 +26,7 @@ inspect.defaultOptions.depth = 1;
 // Enable colorette
 colorette.createColors({ useColor: true });
 
-const dbUrl = `postgres://${process.env.POSTGRES_USERNAME}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`
+const dbUrl = `postgres://${process.env.POSTGRES_USERNAME}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${process.env.POSTGRES_DB}`;
 
 container.logger.info('Readying database...');
 container.settings.users = new Setting('userSettings', 'postgres', new URL(dbUrl), User);
