@@ -6,15 +6,12 @@
 	"license": "UNLICENSE",
 	"type": "module",
 	"imports": {
-		"#lib/*": [
-			"./dist/lib/*.js"
-		],
-		"#root/*": [
-			"./dist/*.js"
-		]
+		"#schemas/*": "./dist/lib/schemas/*.js",
+		"#lib/*": "./dist/lib/*.js",
+		"#root/*": "./dist/*.js"
 	},
 	"dependencies": {
-		"@keyv/sqlite": "^3.6.6",
+		"@keyv/postgres": "^1.4.9",
 		"@sapphire/decorators": "^6.0.2",
 		"@sapphire/discord-utilities": "^3.1.1",
 		"@sapphire/discord.js-utilities": "7.0.2",

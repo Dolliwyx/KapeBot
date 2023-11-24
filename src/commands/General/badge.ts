@@ -45,13 +45,13 @@ export class UserCommand extends Subcommand {
 	public async interactionView(interaction: Subcommand.ChatInputCommandInteraction) {
 		const badge = interaction.options.getString('badge', true);
 
-		const { badges } = await this.container.settings.getGuildSetting(interaction.guildId!);
+		const { badges } = await this.container.settings.guilds.get(interaction.guildId!);
 		if (!badges.length) return interaction.reply({ content: 'There are no badges in this server.', ephemeral: true });
 
 		const targetBadge = badges.find((b) => b.name === badge);
 		if (!targetBadge) return interaction.reply({ content: `There is no badge with the name ${badge}`, ephemeral: true });
 
-		const allUsers = (await this.container.settings.getAllUserSettings()).filter(
+		const allUsers = (await this.container.settings.users.getAll()).filter(
 			(user) => user.settings.userBadges?.some((id) => id === targetBadge.id)
 		);
 
@@ -75,15 +75,15 @@ export class UserCommand extends Subcommand {
 		if (!user) return message.reply('You must provide a user.');
 		if (!badge) return message.reply('You must provide a badge name or ID.');
 
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		const targetBadge = badges.find((b) => b.name === badge) ?? badges.find((b) => b.id === badge);
 		if (!targetBadge) return message.reply(`There is no badge with the name or ID ${badge}.`);
 
-		const { userBadges } = await this.container.settings.getUserSetting(user.id);
+		const { userBadges } = await this.container.settings.users.get(user.id);
 		if (userBadges.some((id) => id === targetBadge.id)) return message.reply('That user already has that badge.');
 		userBadges.push(targetBadge.id);
 
-		await this.container.settings.setUserSetting(user.id, { userBadges });
+		await this.container.settings.users.set(user.id, { userBadges });
 		return message.reply(`Successfully assigned the badge **${targetBadge.name}** to ${userMention(user.id)}.`);
 	}
 
@@ -94,15 +94,15 @@ export class UserCommand extends Subcommand {
 		if (!user) return message.reply('You must provide a user.');
 		if (!badge) return message.reply('You must provide a badge name or ID.');
 
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		const targetBadge = badges.find((b) => b.name === badge) ?? badges.find((b) => b.id === badge);
 		if (!targetBadge) return message.reply(`There is no badge with the name or ID ${badge}.`);
 
-		const { userBadges } = await this.container.settings.getUserSetting(user.id);
+		const { userBadges } = await this.container.settings.users.get(user.id);
 		if (!userBadges.some((id) => id === targetBadge.id)) return message.reply('That user does not have that badge.');
 		userBadges.splice(userBadges.indexOf(targetBadge.id), 1);
 
-		await this.container.settings.setUserSetting(user.id, { userBadges });
+		await this.container.settings.users.set(user.id, { userBadges });
 		return message.reply(`Successfully removed the badge **${targetBadge.name}** from ${userMention(user.id)}.`);
 	}
 
@@ -112,7 +112,7 @@ export class UserCommand extends Subcommand {
 		if (!title) return message.reply('You must provide a title for the badge.');
 		if (!description) return message.reply('You must provide a description for the badge.');
 
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		if (badges.some((badge) => badge.name === title)) return message.reply('A badge with that name already exists.');
 
 		const now = Date.now();
@@ -124,29 +124,29 @@ export class UserCommand extends Subcommand {
 			updatedAt: now,
 			createdBy: message.author.id
 		});
-		await this.container.settings.setGuildSetting(message.guildId!, { badges });
+		await this.container.settings.guilds.set(message.guildId!, { badges });
 		return message.reply(`Successfully created the badge **${title}** with the ID ${inlineCode(now.toString(32))}.`);
 	}
 
 	public async messageBadgeRemove(message: Message, args: Args) {
 		const badge = await args.rest('string');
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		// search by name or by id
 		const targetBadge = badges.find((b) => b.name === badge) ?? badges.find((b) => b.id === badge);
 		if (!targetBadge) return message.reply(`There is no badge with the name or ID ${badge}.`);
 
 		// remove badge from all users
-		const allUsers = (await this.container.settings.getAllUserSettings()).filter((user) =>
+		const allUsers = (await this.container.settings.users.getAll()).filter((user) =>
 			user.settings.userBadges.some((id) => id === targetBadge.id)
 		);
 		for (const user of allUsers) {
 			const userSetting = user.settings;
 			userSetting.userBadges = userSetting.userBadges.filter((id) => id !== targetBadge.id);
-			await this.container.settings.setUserSetting(user.id, userSetting);
+			await this.container.settings.users.set(user.id, userSetting);
 		}
 
 		badges.splice(badges.indexOf(targetBadge), 1);
-		await this.container.settings.setGuildSetting(message.guildId!, { badges });
+		await this.container.settings.guilds.set(message.guildId!, { badges });
 		return message.reply(`Successfully removed the badge **${targetBadge.name}** and to all ${allUsers.length} members.`);
 	}
 
@@ -159,7 +159,7 @@ export class UserCommand extends Subcommand {
 		if (!title) return message.reply('You must provide a title for the badge.');
 		if (!description) return message.reply('You must provide a description for the badge.');
 
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		const targetBadge = badges.find((b) => b.id === badgeId);
 		if (!targetBadge) return message.reply(`There is no badge with ID ${badgeId}.`);
 
@@ -167,12 +167,12 @@ export class UserCommand extends Subcommand {
 		targetBadge.description = description;
 		targetBadge.updatedAt = Date.now();
 
-		await this.container.settings.setGuildSetting(message.guildId!, { badges });
+		await this.container.settings.guilds.set(message.guildId!, { badges });
 		return message.reply(`Successfully edited the badge **${targetBadge.name}**.`);
 	}
 
 	public async messageBadgeList(message: Message) {
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		if (!badges.length) return message.reply('There are no badges in this server.');
 
 		const embed = new EmbedBuilder()
@@ -189,7 +189,7 @@ export class UserCommand extends Subcommand {
 		if (!channel) return message.reply('You must provide a voice channel.');
 		if (!badge) return message.reply('You must provide a badge name or ID.');
 
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		const targetBadge = badges.find((b) => b.name === badge) ?? badges.find((b) => b.id === badge);
 		if (!targetBadge) return message.reply(`There is no badge with the name or ID ${badge}.`);
 
@@ -197,11 +197,11 @@ export class UserCommand extends Subcommand {
 		if (!members.size) return message.reply(`There are no members in ${channel}.`);
 
 		for (const member of members.values()) {
-			const userSetting = await this.container.settings.getUserSetting(member.id);
+			const userSetting = await this.container.settings.users.get(member.id);
 			// if the user already has the badge, return
 			if (userSetting.userBadges.some((id) => id === targetBadge.id)) return;
 			userSetting.userBadges.push(targetBadge.id);
-			await this.container.settings.setUserSetting(member.id, userSetting);
+			await this.container.settings.users.set(member.id, userSetting);
 		}
 
 		this.container.logger.info('Badge', `Assigned the badge ${targetBadge.name} to ${members.size} members.`);
@@ -211,12 +211,12 @@ export class UserCommand extends Subcommand {
 	public async messageBadgeMembers(message: Message, args: Args) {
 		const msg = await message.reply('Fetching members...');
 		const badge = await args.rest('string');
-		const { badges } = await this.container.settings.getGuildSetting(message.guildId!);
+		const { badges } = await this.container.settings.guilds.get(message.guildId!);
 		const targetBadge = badges.find((b) => b.name === badge) ?? badges.find((b) => b.id === badge);
 		if (!targetBadge) return message.reply(`There is no badge with the name or ID ${badge}.`);
 
 		const guildMembers = await message.guild!.members.fetch();
-		const usersWithBadge = (await this.container.settings.getAllUserSettings()).filter(
+		const usersWithBadge = (await this.container.settings.users.getAll()).filter(
 			(user) => user.settings.userBadges && user.settings.userBadges.some((id) => id === targetBadge.id)
 		);
 		const members = usersWithBadge.map((user) => guildMembers.get(user.id)!);
@@ -229,7 +229,7 @@ export class UserCommand extends Subcommand {
 	}
 
 	public override async autocompleteRun(interaction: Subcommand.AutocompleteInteraction) {
-		const { badges } = await this.container.settings.getGuildSetting(interaction.guildId!);
+		const { badges } = await this.container.settings.guilds.get(interaction.guildId!);
 		if (!badges.length) return;
 		interaction.respond(badges.map((badge) => ({ name: badge.name, value: badge.name })));
 	}

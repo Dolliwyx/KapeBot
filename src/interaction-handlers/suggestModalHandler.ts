@@ -11,7 +11,7 @@ export class ModalHandler extends InteractionHandler {
 		const channel = interaction.guild?.channels.cache.get('1176363870630187068') as TextChannel;
 
 		// get latest suggestion id from database, if any
-		const { suggestions } = await this.container.settings.getGuildSetting(interaction.guildId!);
+		const { suggestions } = await this.container.settings.guilds.get(interaction.guildId!);
 		const latestSuggestionId = suggestions.length ? suggestions[suggestions.length - 1].id : 0;
 		const now = Date.now();
 		// write suggestion to database
@@ -22,7 +22,7 @@ export class ModalHandler extends InteractionHandler {
 			createdAt: now
 		});
 
-		await this.container.settings.setGuildSetting(interaction.guildId!, { suggestions });
+		await this.container.settings.guilds.set(interaction.guildId!, { suggestions });
 
 		// send suggestion to suggestions channel
 		const msg = await channel.send({

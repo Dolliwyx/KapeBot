@@ -5,8 +5,9 @@
 		"outDir": "dist",
 		"tsBuildInfoFile": "dist/.tsbuildinfo",
 		"paths": {
+			"#schemas": ["./src/lib/schemas"],
 			"#lib/*": ["./src/lib/*"],
-			"#root/*": ["./*"]
+			"#root/*": ["./*"],
 		}
 	},
 	"include": ["src"]

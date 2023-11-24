@@ -1,24 +1,14 @@
-export const defaultGuildSettings: GuildSettings = {
+export const Guild: GuildSchema = {
 	tags: [],
 	badges: [],
 	suggestions: []
 };
 
-export const defaultUserSettings: UserSettings = {
-	globalBadges: [],
-	userBadges: []
-};
-
-export interface UserSettings {
-	globalBadges: Badge[];
-	userBadges: Badge['id'][];
-}
-
-export interface GuildSettings {
+export type GuildSchema = {
 	tags: Tag[];
 	badges: Badge[];
 	suggestions: Suggestion[];
-}
+};
 
 interface Tag {
 	name: string;
