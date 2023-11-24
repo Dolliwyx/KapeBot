@@ -6,7 +6,7 @@
 	"license": "UNLICENSE",
 	"type": "module",
 	"imports": {
-		"#schemas": "./dist/lib/schemas/index.js",
+		"#schemas/*": "./dist/lib/schemas/*.js",
 		"#lib/*": "./dist/lib/*.js",
 		"#root/*": "./dist/*.js"
 	},
