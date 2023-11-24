@@ -3,7 +3,7 @@ export const User: UserSchema = {
 	userBadges: []
 };
 
-export interface UserSchema {
+export type UserSchema = {
 	globalBadges: Badge[];
 	userBadges: Badge['id'][];
 }

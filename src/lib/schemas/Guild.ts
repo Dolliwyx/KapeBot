@@ -4,7 +4,7 @@ export const Guild: GuildSchema = {
 	suggestions: []
 };
 
-export interface GuildSchema {
+export type GuildSchema = {
 	tags: Tag[];
 	badges: Badge[];
 	suggestions: Suggestion[];
