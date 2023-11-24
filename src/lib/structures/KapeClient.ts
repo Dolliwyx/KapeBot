@@ -8,7 +8,7 @@ export class KapeClient extends SapphireClient {
 	constructor() {
 		super({
 			defaultPrefix: 'k!',
-			regexPrefix: /^(hey +)?kape[,! ]/i,
+			regexPrefix: /^(hey +)?(kape|snowi)[,! ]/i,
 			caseInsensitiveCommands: true,
 			logger: {
 				level: LogLevel.Debug
