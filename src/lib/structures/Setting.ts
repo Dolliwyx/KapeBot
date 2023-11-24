@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import { mergeDefault } from '@sapphire/utilities';
 import Keyv from 'keyv';
 
@@ -24,8 +25,9 @@ export class Setting<T extends object> {
 	}
 
 	public init() {
+		container.logger.info(`[Settings] Setting up ${this.name} settings...`);
 		this.driver = new Keyv(this.url.protocol === 'file:' ? this.url.pathname : this.url.href, { namespace: this.name, adapter: this.adapter });
-		this.driver.on('error', (error) => console.error(error));
+		this.driver.on('error', (error) => container.logger.error(error));
 	}
 
 	public async create(id: string): Promise<T> {
