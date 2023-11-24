@@ -1,7 +1,7 @@
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { Setting } from '#lib/structures/Setting';
-import { Guild, User } from '#schemas/index';
+import { Guild, User } from '#schemas';
 
 export class KapeClient extends SapphireClient {
 	constructor() {
