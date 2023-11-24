@@ -14,6 +14,8 @@ interface Tag {
 	name: string;
 	content: string;
 	author: string;
+	lastEditedBy: string;
+	uses: number;
 	createdAt: number;
 	updatedAt: number;
 }
