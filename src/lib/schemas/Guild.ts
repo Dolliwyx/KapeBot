@@ -8,7 +8,7 @@ export type GuildSchema = {
 	tags: Tag[];
 	badges: Badge[];
 	suggestions: Suggestion[];
-}
+};
 
 interface Tag {
 	name: string;
