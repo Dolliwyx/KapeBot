@@ -9,7 +9,7 @@ declare module '@skyra/env-utilities' {
 		POSTGRES_USERNAME: string;
 		POSTGRES_PASSWORD: string;
 		POSTGRES_HOST: string;
-		POSTGRES_PORT: number;
+		POSTGRES_PORT: string;
 		POSTGRES_DB: string;
 	}
 }
