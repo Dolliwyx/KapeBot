@@ -148,7 +148,11 @@ export class UserCommand extends Subcommand {
 		const option = interaction.options.getFocused(true);
 
 		if (['show', 'info'].includes(subcommand) && option.name === 'name') {
-			return interaction.respond(tags.map((tag) => ({ name: `🏷️ ${tag.name}`, value: tag.name })));
+			return interaction.respond(
+				tags
+					.filter((tag) => tag.name.toLowerCase().startsWith(option.value.toLowerCase()))
+					.map((tag) => ({ name: `🏷️ ${tag.name}`, value: tag.name }))
+			);
 		}
 	}
 }
