@@ -92,7 +92,7 @@ export class UserCommand extends Subcommand {
 		if (!tagContent) return reply(message, 'You must provide tag content.');
 
 		const { tags } = await this.container.settings.guilds.get(message.guild!.id);
-		const tag = tags.find((tag) => tag.name === tagName);
+		const tag = tags.find((tag) => tag.name.toLowerCase() === tagName.toLowerCase());
 		if (tag) return reply(message, `The tag ${inlineCode(tagName)} already exists.`);
 
 		tags.push({
