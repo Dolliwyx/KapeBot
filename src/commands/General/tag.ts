@@ -2,6 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Args } from '@sapphire/framework';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { Subcommand } from '@sapphire/plugin-subcommands';
+import { codeBlock } from '@sapphire/utilities';
 import { AutocompleteInteraction, EmbedBuilder, Message, inlineCode, time, userMention } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
@@ -15,7 +16,8 @@ import { AutocompleteInteraction, EmbedBuilder, Message, inlineCode, time, userM
 			entries: [
 				{ name: 'add', messageRun: 'messageAdd', preconditions: ['ModeratorOnly', 'GuildTextOnly'] },
 				{ name: 'remove', messageRun: 'messageRemove', preconditions: ['ModeratorOnly', 'GuildTextOnly'] },
-				{ name: 'edit', messageRun: 'messageEdit', preconditions: ['ModeratorOnly', 'GuildTextOnly'] }
+				{ name: 'edit', messageRun: 'messageEdit', preconditions: ['ModeratorOnly', 'GuildTextOnly'] },
+				{ name: 'raw', messageRun: 'messageRaw', preconditions: ['ModeratorOnly', 'GuildTextOnly'] }
 			]
 		}
 	]
@@ -139,6 +141,17 @@ export class UserCommand extends Subcommand {
 
 		await this.container.settings.guilds.set(message.guildId!, { tags });
 		return reply(message, `The tag ${inlineCode(tagName)} has been edited.`);
+	}
+
+	public async messageRaw(message: Message, args: Args) {
+		const tagName = await args.pick('string').catch(() => null);
+		if (!tagName) return reply(message, 'You must provide a tag name.');
+
+		const { tags } = await this.container.settings.guilds.get(message.guild!.id);
+		const tag = tags.find((tag) => tag.name.toLowerCase() === tagName.toLowerCase());
+		if (!tag) return reply(message, `The tag ${inlineCode(tagName)} does not exist.`);
+
+		return reply(message, codeBlock(tag.content));
 	}
 
 	public override async autocompleteRun(interaction: AutocompleteInteraction) {
