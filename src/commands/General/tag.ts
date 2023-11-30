@@ -3,7 +3,7 @@ import { Args } from '@sapphire/framework';
 import { reply } from '@sapphire/plugin-editable-commands';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { codeBlock } from '@sapphire/utilities';
-import { AutocompleteInteraction, EmbedBuilder, Message, inlineCode, time, userMention } from 'discord.js';
+import { AutocompleteInteraction, EmbedBuilder, Message, inlineCode, italic, time, userMention } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'View and show the server tags',
@@ -61,7 +61,7 @@ export class UserCommand extends Subcommand {
 		await this.container.settings.guilds.set(interaction.guildId!, { tags });
 
 		return interaction.reply({
-			content: [user ? `Tag suggestion for ${user}:` : '', tag.content].join('\n'),
+			content: [user ? italic(`Tag suggestion for ${user}:`) : '', tag.content].join('\n'),
 			allowedMentions: { repliedUser: true, users: user ? [user.id] : [] }
 		});
 	}
