@@ -132,7 +132,7 @@ export class UserCommand extends Subcommand {
 		if (!tagContent) return reply(message, 'You must provide tag content.');
 
 		const { tags } = await this.container.settings.guilds.get(message.guild!.id);
-		const tag = tags.find((tag) => tag.name === tagName);
+		const tag = tags.find((tag) => tag.name.toLowerCase() === tagName.toLowerCase());
 		if (!tag) return reply(message, `The tag ${inlineCode(tagName)} does not exist.`);
 
 		tag.content = tagContent;
@@ -140,7 +140,7 @@ export class UserCommand extends Subcommand {
 		tag.lastEditedBy = message.author.id;
 
 		await this.container.settings.guilds.set(message.guildId!, { tags });
-		return reply(message, `The tag ${inlineCode(tagName)} has been edited.`);
+		return reply(message, `The tag ${inlineCode(tag.name)} has been edited.`);
 	}
 
 	public async messageRaw(message: Message, args: Args) {
